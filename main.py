@@ -1,9 +1,8 @@
 class Asiento:
     def __init__(self, color, precio, registro):
+        self.color = color
         self.precio = precio
         self.registro = registro
-        self.color = None
-        self.cambiarColor(color)
 
     def cambiarColor(self, nuevo_color):
         colores_permitidos = ["rojo", "verde", "amarillo", "negro", "blanco"]
@@ -14,21 +13,20 @@ class Asiento:
 class Motor:
     def __init__(self, cilindros, tipo, registro):
         self.cilindros = cilindros
-        self.tipo = None
+        self.tipo = tipo
         self.registro = registro
-        self.asignarTipo(tipo)
 
-    def cambiarRegistro(self, nuevo_registro):
-        self.registro = nuevo_registro
+    def cambiarRegistro(self, nuevoRegistro):
+        self.registro = nuevoRegistro
 
-    def asignarTipo(self, nuevo_tipo):
-        tipos_permitidos = ["electrico", "gasolina"]
-        if nuevo_tipo in tipos_permitidos:
-            self.tipo = nuevo_tipo
+    def asignarTipo(self, nuevoTipo):
+        tipos_permitidos = ["gasolina", "electrico"]
+        if nuevoTipo in tipos_permitidos:
+            self.tipo = nuevoTipo
 
 
 class Auto:
-    cantidadCreados = 0
+    cantidadCreados = 0  
 
     def __init__(self, modelo, precio, asientos, marca, motor, registro):
         self.modelo = modelo
@@ -37,15 +35,14 @@ class Auto:
         self.marca = marca
         self.motor = motor
         self.registro = registro
-        Auto.cantidadCreados += 1
+        Auto.cantidadCreados += 1 
 
     def cantidadAsientos(self):
         return sum(1 for asiento in self.asientos if isinstance(asiento, Asiento))
 
     def verificarIntegridad(self):
-        for asiento in self.asientos:
-            if asiento is not None and asiento.registro != self.motor.registro:
-                return "Las piezas no son originales"
-        if self.registro != self.motor.registro:
+        registros_asientos = {asiento.registro for asiento in self.asientos if isinstance(asiento, Asiento)}
+        if len(registros_asientos) == 1 and self.registro == self.motor.registro == registros_asientos.pop():
+            return "Auto original"
+        else:
             return "Las piezas no son originales"
-        return "Auto original"
